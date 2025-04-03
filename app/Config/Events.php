@@ -20,52 +20,31 @@ use CodeIgniter\Exceptions\FrameworkException;
  *      Events::on('create', [$myInstance, 'myMethod']);
  */
 
-// Events::on('pre_system', function () {
-// 	if (ENVIRONMENT !== 'testing')
-// 	{
-// 		if (ini_get('zlib.output_compression'))
-// 		{
-// 			throw FrameworkException::forEnabledZlibOutputCompression();
-// 		}
-
-// 		while (ob_get_level() > 0)
-// 		{
-// 			ob_end_flush();
-// 		}
-
-// 		ob_start(function ($buffer) {
-// 			return $buffer;
-// 		});
-// 	}
-
-// 	/*
-// 	 * --------------------------------------------------------------------
-// 	 * Debug Toolbar Listeners.
-// 	 * --------------------------------------------------------------------
-// 	 * If you delete, they will no longer be collected.
-// 	 */
-// 	if (ENVIRONMENT !== 'production')
-// 	{
-// 		Events::on('DBQuery', 'CodeIgniter\Debug\Toolbar\Collectors\Database::collect');
-// 		Services::toolbar()->respond();
-// 	}
-// });
-
-Events::on('pre_system', function (){
-	echo "<br>Event 1 - pre_system worked successfully. <br>";
+// Event triggered before the system starts
+Events::on('pre_system', function () {
+    echo "Event 1 - pre_system worked successfully." . PHP_EOL;
 });
 
-Events::on('post_controller_constructor', function(){
-	echo "<br> Event 2.1 - post_controller_constructor event ran successfully. <br>";
+// Event triggered after the controller constructor (priority 1)
+Events::on('post_controller_constructor', function () {
+    echo "Event 2.1 - post_controller_constructor event ran successfully." . PHP_EOL;
 }, 1);
 
-Events::on('post_controller_constructor', function(){
-	echo "<br> Event 2.2 - post_controller_constructor event ran successfully. <br>";
+// Event triggered after the controller constructor (priority 2)
+Events::on('post_controller_constructor', function () {
+    echo "Event 2.2 - post_controller_constructor event ran successfully." . PHP_EOL;
 }, 2);
 
-Events::on('post_system', function (){
-	echo "<br>Event 3 - post_system event ran successfully.<br>";
+// Event triggered after the system finishes execution
+Events::on('post_system', function () {
+    echo "Event 3 - post_system event ran successfully." . PHP_EOL;
 });
-Events::on('sendEmail', function ($email, $code){
-	echo "<br>Email has been sent successfully to this ". $email . " and your verification code is " . $code . "<br>";
+
+// Custom event to send an email with a verification code
+Events::on('sendEmail', function ($email, $code) {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($code)) {
+        echo "Email has been sent successfully to {$email} with verification code: {$code}" . PHP_EOL;
+    } else {
+        echo "Invalid email or verification code provided." . PHP_EOL;
+    }
 });
